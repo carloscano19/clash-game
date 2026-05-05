@@ -1,0 +1,174 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PNPM_VERSION: 10
+  NODE_VERSION: 20
+
+jobs:
+  # ------------------------------------------------------------------ #
+  # Typecheck                                                           #
+  # ------------------------------------------------------------------ #
+  typecheck:
+    name: Type check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+  # ------------------------------------------------------------------ #
+  # Lint                                                                #
+  # ------------------------------------------------------------------ #
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+  # ------------------------------------------------------------------ #
+  # Unit tests + coverage                                               #
+  # ------------------------------------------------------------------ #
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests with coverage
+        run: pnpm test:coverage
+        env:
+          # Minimal env for tests — no Supabase needed for unit tests
+          NEXT_PUBLIC_SUPABASE_URL: http://localhost:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+          GEMINI_API_KEY: test-gemini-key
+          SOCIOS_ENV: local
+          LOG_LEVEL: silent
+
+  # ------------------------------------------------------------------ #
+  # Bundle security check                                               #
+  # ------------------------------------------------------------------ #
+  bundle-check:
+    name: Bundle security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check no secrets in client bundle NEXT_PUBLIC_* vars
+        run: |
+          if grep -rE "NEXT_PUBLIC_.*KEY|NEXT_PUBLIC_.*SECRET" .env.example; then
+            echo "ERROR: NEXT_PUBLIC_ variable contains KEY or SECRET — secrets must not be exposed to the client"
+            exit 1
+          fi
+          echo "Bundle security check passed"
+
+  # ------------------------------------------------------------------ #
+  # E2E tests (runs on PRs only, not on every push)                     #
+  # ------------------------------------------------------------------ #
+  e2e:
+    name: E2E tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: [typecheck, lint, test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Build app
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://localhost:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+          GEMINI_API_KEY: test-gemini-key
+          SOCIOS_ENV: local
+          LOG_LEVEL: silent
+
+      - name: Run E2E tests
+        run: pnpm test:e2e
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://localhost:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+          GEMINI_API_KEY: test-gemini-key
+          SOCIOS_ENV: local
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

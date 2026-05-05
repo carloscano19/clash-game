@@ -1,0 +1,122 @@
+/*
+ * Global styles entry point.
+ * Imports Tailwind CSS and project design tokens.
+ * See design_system.md §1 and ag_instructions.md §0.9
+ *
+ * DEVIATION: Next.js 16 ships with Tailwind 4 which uses CSS-first configuration
+ * via @theme instead of tailwind.config.ts. Tokens are exposed as CSS custom properties
+ * and consumed by @theme. See docs/DEVIATIONS.md for rationale.
+ */
+
+@import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/animations.css";
+
+/* ------------------------------------------------------------------ */
+/* Tailwind 4 theme — maps design tokens to utility classes            */
+/* ------------------------------------------------------------------ */
+@theme inline {
+  /* Colors */
+  --color-chiliz-red:        var(--color-chiliz-red);
+  --color-chiliz-red-hover:  var(--color-chiliz-red-hover);
+  --color-chiliz-red-press:  var(--color-chiliz-red-press);
+
+  --color-charcoal-900:      var(--color-charcoal-900);
+  --color-charcoal-800:      var(--color-charcoal-800);
+  --color-charcoal-700:      var(--color-charcoal-700);
+  --color-charcoal-600:      var(--color-charcoal-600);
+  --color-charcoal-500:      var(--color-charcoal-500);
+  --color-charcoal-400:      var(--color-charcoal-400);
+
+  --color-text-primary:      var(--color-text-primary);
+  --color-text-secondary:    var(--color-text-secondary);
+  --color-text-tertiary:     var(--color-text-tertiary);
+  --color-text-disabled:     var(--color-text-disabled);
+
+  --color-cyan-500:          var(--color-cyan-500);
+  --color-cyan-400:          var(--color-cyan-400);
+  --color-cyan-dim:          var(--color-cyan-dim);
+
+  --color-gold-500:          var(--color-gold-500);
+  --color-gold-400:          var(--color-gold-400);
+  --color-gold-dim:          var(--color-gold-dim);
+
+  --color-success:           var(--color-success);
+  --color-warning:           var(--color-warning);
+  --color-danger:            var(--color-chiliz-red);
+  --color-info:              var(--color-cyan-500);
+
+  /* Fonts */
+  --font-display:            var(--font-display);
+  --font-body:               var(--font-body);
+  --font-mono:               var(--font-mono);
+
+  /* Border radius */
+  --radius-sm:               var(--radius-sm);
+  --radius-md:               var(--radius-md);
+  --radius-lg:               var(--radius-lg);
+  --radius-xl:               var(--radius-xl);
+  --radius-pill:             var(--radius-pill);
+
+  /* Animations */
+  --animate-score-pulse:     score-pulse var(--dur-pulse) var(--ease-standard) forwards;
+  --animate-presence-pulse:  presence-pulse 1.2s ease-in-out infinite;
+  --animate-presence-pulse-fast: presence-pulse-fast 0.8s ease-in-out infinite;
+  --animate-border-breathe:  border-breathe var(--dur-pulse) var(--ease-standard) infinite;
+  --animate-vs-float:        vs-float 6s ease-in-out infinite;
+  --animate-lobby-ring:      lobby-ring-expand 600ms var(--ease-out) forwards;
+  --animate-avatar-left:     avatar-rush-left var(--dur-slow) var(--ease-spring) both;
+  --animate-avatar-right:    avatar-rush-right var(--dur-slow) var(--ease-spring) both;
+  --animate-slide-up:        slide-up var(--dur-base) var(--ease-spring) both;
+  --animate-stake-flip:      stake-flip 320ms var(--ease-standard);
+  --animate-goal-flash:      goal-flash 200ms var(--ease-out) forwards;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base styles                                                         */
+/* ------------------------------------------------------------------ */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-charcoal-900);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 22px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Focus visible — cyan ring, 2px, offset 2px (design_system.md §7) */
+  :focus-visible {
+    outline: 2px solid var(--color-cyan-500);
+    outline-offset: 2px;
+  }
+
+  /* Scrollbar — dark theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-charcoal-900);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-charcoal-500);
+    border-radius: var(--radius-pill);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-charcoal-400);
+  }
+}

@@ -1,0 +1,127 @@
+/*
+ * Global animations — all keyframes live here.
+ * Components apply animations via Tailwind custom classes (animate-score-pulse, etc.)
+ * NEVER use inline style={{ animation: ... }}
+ * See design_system.md §9 and §6
+ */
+
+/* ------------------------------------------------------------------ */
+/* Score pulse — applied to the side that scored (design_system.md §4.7) */
+/* ------------------------------------------------------------------ */
+@keyframes score-pulse {
+  0%   { transform: scale(1);    color: var(--color-text-primary); text-shadow: none; }
+  20%  { transform: scale(1.18); color: var(--color-chiliz-red);   text-shadow: 0 0 16px var(--color-chiliz-red-glow); }
+  100% { transform: scale(1);    color: var(--color-text-primary); text-shadow: none; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Presence dot pulse (design_system.md §4.4)                         */
+/* ------------------------------------------------------------------ */
+@keyframes presence-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+@keyframes presence-pulse-fast {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Border breathing — AI arbitrage (design_system.md §6, step 6)      */
+/* ------------------------------------------------------------------ */
+@keyframes border-breathe {
+  0%, 100% { box-shadow: var(--glow-cyan); }
+  50%       { box-shadow: 0 0 0 1px var(--color-cyan-500), 0 0 40px var(--color-cyan-glow); }
+}
+
+/* ------------------------------------------------------------------ */
+/* VS glyph float (design_system.md §4.5)                             */
+/* ------------------------------------------------------------------ */
+@keyframes vs-float {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(4px); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Lobby enter button ring (design_system.md §6, step 1)              */
+/* ------------------------------------------------------------------ */
+@keyframes lobby-ring-expand {
+  0%   { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Avatar rush-in (design_system.md §6, step 2)                       */
+/* ------------------------------------------------------------------ */
+@keyframes avatar-rush-left {
+  from { transform: translateX(-32px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+@keyframes avatar-rush-right {
+  from { transform: translateX(32px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Challenge parsed — slide in from below (design_system.md §6, step 3)*/
+/* ------------------------------------------------------------------ */
+@keyframes slide-up {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Stake chip flip — Y axis (design_system.md §6, step 4)             */
+/* ------------------------------------------------------------------ */
+@keyframes stake-flip {
+  0%   { transform: rotateY(0deg); }
+  50%  { transform: rotateY(90deg); }
+  100% { transform: rotateY(0deg); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Goal flash — full-screen vignette (design_system.md §6, step 5)    */
+/* ------------------------------------------------------------------ */
+@keyframes goal-flash {
+  0%   { opacity: 0.15; }
+  100% { opacity: 0; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Gold shimmer — winner avatar (design_system.md §6, step 7)         */
+/* ------------------------------------------------------------------ */
+@keyframes gold-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion overrides                                            */
+/* Collapse non-essential animation keyframes to simple fades          */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-score-pulse {
+    animation: none;
+  }
+
+  .animate-vs-float {
+    animation: none;
+  }
+
+  .animate-goal-flash {
+    animation: none;
+    opacity: 0;
+  }
+
+  .animate-avatar-left,
+  .animate-avatar-right {
+    animation: none;
+    opacity: 1;
+  }
+
+  .animate-border-breathe {
+    animation: none;
+  }
+}
