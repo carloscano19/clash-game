@@ -20,6 +20,29 @@ const PROTECTED_PATHS = ['/duel/', '/history'];
 const SEMI_PROTECTED_PATHS = ['/lobby/'];
 
 export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // 1. Password Gate (from former middleware.ts)
+  // Allow access to the gate page and static assets
+  if (
+    pathname === '/gate' ||
+    pathname.startsWith('/_next') ||
+    pathname.includes('favicon.ico') ||
+    pathname.includes('.png') ||
+    pathname.includes('.jpg')
+  ) {
+    return NextResponse.next();
+  }
+
+  // Check for the access cookie
+  const accessCookie = request.cookies.get('clash_access');
+  if (accessCookie?.value !== 'granted') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/gate';
+    return NextResponse.redirect(url);
+  }
+
+  // 2. Supabase Auth Refresh (original proxy.ts logic)
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -41,7 +64,6 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  const { pathname } = request.nextUrl;
   const isLocal = process.env['SOCIOS_ENV'] === 'local';
 
   const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));

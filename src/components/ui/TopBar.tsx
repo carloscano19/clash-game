@@ -121,7 +121,7 @@ function MatchPill() {
 }
 
 /** Lives pill */
-function LivesPill({ lives }: { lives?: number }) {
+function LivesPill({ lives }: { lives?: number | undefined }) {
   return (
     <div
       className="flex items-center gap-1.5 px-3 py-1 rounded-full"
@@ -142,7 +142,7 @@ function LivesPill({ lives }: { lives?: number }) {
 }
 
 /** Points pill */
-function PointsPill({ points, rank }: { points?: number; rank?: string }) {
+function PointsPill({ points, rank }: { points?: number | undefined; rank?: string | undefined }) {
   return (
     <div
       className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${points !== undefined ? 'animate-pulse-glow' : ''}`}
