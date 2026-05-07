@@ -64,7 +64,7 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  const isLocal = process.env['SOCIOS_ENV'] === 'local';
+  const isLocal = process.env['SOCIOS_ENV'] === 'local' || accessCookie?.value === 'granted';
 
   const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
   const isSemiProtected = SEMI_PROTECTED_PATHS.some((path) => pathname.startsWith(path));
