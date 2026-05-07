@@ -13,7 +13,7 @@ export default function GatePage() {
     // Simple demo password: clash2026
     if (password === 'clash2026') {
       document.cookie = 'clash_access=granted; path=/; max-age=86400';
-      router.push('/');
+      window.location.href = '/';
     } else {
       setError(true);
       setTimeout(() => setError(false), 2000);
