@@ -1,0 +1,338 @@
+{
+  "match": {
+    "id": "m_arg_fra",
+    "externalId": "ext_1",
+    "competition": "WORLD_CUP_2026",
+    "homeTeam": {
+      "id": "t_arg",
+      "name": "Argentina",
+      "shortCode": "ARG",
+      "fanTokenSymbol": "ARG"
+    },
+    "awayTeam": {
+      "id": "t_fra",
+      "name": "France",
+      "shortCode": "FRA",
+      "fanTokenSymbol": "FRA"
+    },
+    "kickoffAt": "2026-06-15T18:00:00Z",
+    "status": "scheduled",
+    "currentMinute": 0,
+    "score": {
+      "home": 0,
+      "away": 0
+    }
+  },
+  "events": [
+    {
+      "id": "ev_0pssqiv",
+      "matchId": "m_arg_fra",
+      "type": "kickoff",
+      "minute": 0,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.127Z"
+    },
+    {
+      "id": "ev_7b4selt",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 5,
+      "team": "home",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_h0tkn2r",
+      "matchId": "m_arg_fra",
+      "type": "shot_on_target",
+      "minute": 10,
+      "team": "home",
+      "player": {
+        "id": "p_messi",
+        "name": "L. Messi"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_b0a6271",
+      "matchId": "m_arg_fra",
+      "type": "goal",
+      "minute": 11,
+      "team": "home",
+      "player": {
+        "id": "p_messi",
+        "name": "L. Messi"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_gshl1qb",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 18,
+      "team": "away",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_1tpzpjv",
+      "matchId": "m_arg_fra",
+      "type": "yellow_card",
+      "minute": 22,
+      "team": "home",
+      "player": {
+        "id": "p_depaul",
+        "name": "R. De Paul"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_47qao2n",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 25,
+      "team": "home",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_y5tqg6o",
+      "matchId": "m_arg_fra",
+      "type": "goal",
+      "minute": 30,
+      "team": "away",
+      "player": {
+        "id": "p_mbappe",
+        "name": "K. Mbappe"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_esc3fod",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 35,
+      "team": "away",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_ezxrmq6",
+      "matchId": "m_arg_fra",
+      "type": "yellow_card",
+      "minute": 40,
+      "team": "away",
+      "player": {
+        "id": "p_rabiot",
+        "name": "A. Rabiot"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_vepl5xa",
+      "matchId": "m_arg_fra",
+      "type": "half_time",
+      "minute": 45,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_3rqdjhc",
+      "matchId": "m_arg_fra",
+      "type": "second_half_start",
+      "minute": 45,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_b3tz5ls",
+      "matchId": "m_arg_fra",
+      "type": "goal",
+      "minute": 50,
+      "team": "home",
+      "player": {
+        "id": "p_dimaria",
+        "name": "A. Di Maria"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_25kl266",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 55,
+      "team": "home",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_oqu3y3e",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 56,
+      "team": "home",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_zxpeiqr",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 57,
+      "team": "home",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_opcvss5",
+      "matchId": "m_arg_fra",
+      "type": "yellow_card",
+      "minute": 60,
+      "team": "home",
+      "player": {
+        "id": "p_romero",
+        "name": "C. Romero"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_3uzdew1",
+      "matchId": "m_arg_fra",
+      "type": "goal",
+      "minute": 65,
+      "team": "away",
+      "player": {
+        "id": "p_giroud",
+        "name": "O. Giroud"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_2y0taul",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 70,
+      "team": "away",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_jcgocew",
+      "matchId": "m_arg_fra",
+      "type": "goal",
+      "minute": 75,
+      "team": "home",
+      "player": {
+        "id": "p_messi",
+        "name": "L. Messi"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_c0ka8vl",
+      "matchId": "m_arg_fra",
+      "type": "yellow_card",
+      "minute": 80,
+      "team": "away",
+      "player": {
+        "id": "p_tcho",
+        "name": "A. Tchouameni"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_o29kxtp",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 81,
+      "team": "home",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_4jcvyib",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 82,
+      "team": "home",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_9bm4c17",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 83,
+      "team": "away",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_lrr00v7",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 85,
+      "team": "away",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_ey1u0v6",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 88,
+      "team": "home",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_o45uw1b",
+      "matchId": "m_arg_fra",
+      "type": "corner",
+      "minute": 91,
+      "team": "away",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_2tmpq1i",
+      "matchId": "m_arg_fra",
+      "type": "full_time",
+      "minute": 95,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    }
+  ]
+}

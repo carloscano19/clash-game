@@ -1,0 +1,159 @@
+{
+  "match": {
+    "id": "m_bra_por",
+    "externalId": "ext_3",
+    "competition": "WORLD_CUP_2026",
+    "homeTeam": {
+      "id": "t_bra",
+      "name": "Brazil",
+      "shortCode": "BRA",
+      "fanTokenSymbol": "BRA"
+    },
+    "awayTeam": {
+      "id": "t_por",
+      "name": "Portugal",
+      "shortCode": "POR",
+      "fanTokenSymbol": "POR"
+    },
+    "kickoffAt": "2026-06-17T18:00:00Z",
+    "status": "scheduled",
+    "currentMinute": 0,
+    "score": {
+      "home": 0,
+      "away": 0
+    }
+  },
+  "events": [
+    {
+      "id": "ev_tpj1ss5",
+      "matchId": "m_bra_por",
+      "type": "kickoff",
+      "minute": 0,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_w4fommv",
+      "matchId": "m_bra_por",
+      "type": "goal",
+      "minute": 20,
+      "team": "home",
+      "player": {
+        "id": "p_neymar",
+        "name": "Neymar Jr"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_x9obg4k",
+      "matchId": "m_bra_por",
+      "type": "half_time",
+      "minute": 45,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_qgixvj1",
+      "matchId": "m_bra_por",
+      "type": "second_half_start",
+      "minute": 45,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_yeexyd9",
+      "matchId": "m_bra_por",
+      "type": "goal",
+      "minute": 80,
+      "team": "away",
+      "player": {
+        "id": "p_cr7",
+        "name": "C. Ronaldo"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_rgwsmmi",
+      "matchId": "m_bra_por",
+      "type": "full_time",
+      "minute": 90,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_9a1mdig",
+      "matchId": "m_bra_por",
+      "type": "penalty_scored",
+      "minute": 121,
+      "team": "home",
+      "player": {
+        "id": "p_neymar",
+        "name": "Neymar Jr"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_8c0fa46",
+      "matchId": "m_bra_por",
+      "type": "penalty_scored",
+      "minute": 122,
+      "team": "away",
+      "player": {
+        "id": "p_cr7",
+        "name": "C. Ronaldo"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_i6qwnqz",
+      "matchId": "m_bra_por",
+      "type": "penalty_missed",
+      "minute": 123,
+      "team": "home",
+      "player": {
+        "id": "p_vini",
+        "name": "Vini Jr"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_usyphab",
+      "matchId": "m_bra_por",
+      "type": "penalty_scored",
+      "minute": 124,
+      "team": "away",
+      "player": {
+        "id": "p_bruno",
+        "name": "B. Fernandes"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    },
+    {
+      "id": "ev_9a3fdlx",
+      "matchId": "m_bra_por",
+      "type": "penalty_missed",
+      "minute": 125,
+      "team": "home",
+      "player": {
+        "id": "p_rich",
+        "name": "Richarlison"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.130Z"
+    }
+  ]
+}

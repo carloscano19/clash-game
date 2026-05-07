@@ -125,3 +125,29 @@
     animation: none;
   }
 }
+/* ------------------------------------------------------------------ */
+/* vsFloat — alias for VS glyph inline-style animation reference       */
+/* ------------------------------------------------------------------ */
+@keyframes vsFloat {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(4px); }
+}
+
+/* ------------------------------------------------------------------ */
+/* slideInFromTop — new event row entrance in lobby feed               */
+/* ------------------------------------------------------------------ */
+@keyframes slideInFromTop {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+/* ------------------------------------------------------------------ */
+/* pulseGlow — interactive ranking points indicator                   */
+/* ------------------------------------------------------------------ */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+  50%       { box-shadow: 0 0 25px rgba(245, 158, 11, 0.4), 0 0 5px rgba(245, 158, 11, 0.2); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}

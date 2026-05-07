@@ -1,34 +1,39 @@
-/**
- * History page — /history
- * Stub page — wired in Phase 1 smoke test.
- * See srs.md, design_system.md §2.3
- */
+import { getMyProfile } from '@/features/profile/server/profile';
 
-export default function HistoryPage() {
+export default async function HistoryPage() {
+  const profileResult = await getMyProfile();
+
   return (
-    <div
-      className="flex flex-col items-center justify-center min-h-[calc(100vh-60px)] px-4"
-      style={{ backgroundColor: 'var(--color-charcoal-900)' }}
-    >
-      <div
-        className="text-center p-8 rounded-xl max-w-sm w-full"
-        style={{
-          backgroundColor: 'var(--color-charcoal-800)',
-          border: '1px solid var(--color-charcoal-500)',
-        }}
-      >
-        <h1
-          className="text-[32px] font-semibold mb-2"
-          style={{ fontFamily: 'var(--font-display)', color: 'var(--color-text-primary)' }}
-        >
-          HISTORY
+    <main className="p-4 md:p-8 pt-[80px]">
+      <div className="max-w-4xl mx-auto space-y-6">
+        <h1 className="text-2xl font-display font-semibold tracking-wide text-text-primary">
+          HISTORY (Phase 1 Smoke Test)
         </h1>
-        <p style={{ color: 'var(--color-text-secondary)', fontSize: '13px' }}>
-          Your duel history will appear here.
-          <br />
-          Sign in to view your record.
-        </p>
+
+        <div className="bg-charcoal-800 border border-charcoal-500 rounded-xl p-6">
+          {profileResult.ok ? (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-text-primary">Your Profile</h2>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="text-text-secondary">ID:</div>
+                <div className="text-text-primary font-mono">{profileResult.value.id}</div>
+                
+                <div className="text-text-secondary">Display Name:</div>
+                <div className="text-text-primary">{profileResult.value.display_name}</div>
+                
+                <div className="text-text-secondary">SSU Balance:</div>
+                <div className="text-text-primary font-mono text-chiliz-red font-semibold">
+                  {profileResult.value.ssu_balance.toString()} ⟁
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-warning">
+              Failed to load profile: {profileResult.error.message}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

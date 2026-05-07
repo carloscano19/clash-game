@@ -1,4 +1,6 @@
-'use client';
+import Link from 'next/link';
+import { Zap } from 'lucide-react';
+import { getServerUserProfile } from '@/lib/auth';
 
 /**
  * TopBar — persistent top bar component.
@@ -6,11 +8,10 @@
  * Height: 60px, background: charcoal-900, bottom border: charcoal-500
  * See design_system.md §2.2
  */
+export async function TopBar() {
+  const profileResult = await getServerUserProfile();
+  const profile = profileResult.ok ? profileResult.value : null;
 
-import Link from 'next/link';
-import { Zap } from 'lucide-react';
-
-export function TopBar() {
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50 h-[60px] flex items-center justify-between px-4 md:px-6"
@@ -53,10 +54,25 @@ export function TopBar() {
         <MatchPill />
       </div>
 
-      {/* Right: Balance + Avatar */}
       <div className="flex items-center gap-3">
-        <BalancePill />
-        <AvatarMenu />
+        <Link href="/leaderboard" className="no-underline group">
+          <PointsPill points={profile ? 1250 : undefined} rank={profile ? "#142" : undefined} />
+        </Link>
+        {profile ? (
+          <LivesPill lives={5} />
+        ) : (
+          <LivesPill />
+        )}
+        {profile ? (
+          <AvatarMenu initial={profile.display_name.charAt(0).toUpperCase()} />
+        ) : (
+          <Link
+            href="/login"
+            className="text-sm font-semibold text-text-primary hover:text-chiliz-red transition-colors"
+          >
+            Login
+          </Link>
+        )}
       </div>
     </header>
   );
@@ -104,42 +120,71 @@ function MatchPill() {
   );
 }
 
-/** SSU balance pill — placeholder until auth is wired (Phase 1) */
-function BalancePill() {
+/** Lives pill */
+function LivesPill({ lives }: { lives?: number }) {
   return (
     <div
-      className="flex items-center gap-1 px-3 py-1 rounded-full"
+      className="flex items-center gap-1.5 px-3 py-1 rounded-full"
       style={{
-        backgroundColor: 'var(--color-charcoal-800)',
-        border: '1px solid var(--color-charcoal-500)',
-        fontFamily: 'var(--font-mono)',
-        color: 'var(--color-text-secondary)',
-        fontSize: '13px',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        border: '1px solid rgba(239, 68, 68, 0.3)',
+        fontFamily: 'var(--font-display)',
+        color: lives !== undefined ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+        fontSize: '14px',
+        fontWeight: 700,
       }}
-      aria-label="SSU balance"
+      aria-label="Lives remaining"
     >
-      <span style={{ color: 'var(--color-text-tertiary)' }}>⟁</span>
-      <span>—</span>
+      <span style={{ fontSize: '12px' }}>❤️</span>
+      <span>{lives !== undefined ? `${lives}/5` : '—'}</span>
     </div>
   );
 }
 
-/** Avatar menu — placeholder until auth is wired (Phase 1) */
-function AvatarMenu() {
+/** Points pill */
+function PointsPill({ points, rank }: { points?: number; rank?: string }) {
+  return (
+    <div
+      className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${points !== undefined ? 'animate-pulse-glow' : ''}`}
+      style={{
+        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+        border: '1px solid rgba(245, 158, 11, 0.3)',
+        fontFamily: 'var(--font-display)',
+        color: points !== undefined ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+        fontSize: '14px',
+        fontWeight: 700,
+      }}
+      aria-label="Ranking Points"
+    >
+      <span style={{ fontSize: '13px' }}>🏆</span>
+      <span className="group-hover:text-amber-400 transition-colors">
+        {points !== undefined ? points.toLocaleString() : 'RANKING'}
+      </span>
+      {rank && (
+        <span className="ml-1 text-[10px] text-amber-400 opacity-80" style={{ fontFamily: 'var(--font-mono)' }}>
+          {rank}
+        </span>
+      )}
+    </div>
+  );
+}
+
+/** Avatar menu */
+function AvatarMenu({ initial }: { initial: string }) {
   return (
     <button
       type="button"
-      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors"
+      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors hover:ring-2 hover:ring-chiliz-red"
       style={{
         backgroundColor: 'var(--color-charcoal-700)',
         border: '1px solid var(--color-charcoal-500)',
-        color: 'var(--color-text-secondary)',
+        color: 'var(--color-text-primary)',
       }}
       aria-label="Account menu"
       aria-haspopup="true"
       id="avatar-menu-trigger"
     >
-      ?
+      {initial}
     </button>
   );
 }

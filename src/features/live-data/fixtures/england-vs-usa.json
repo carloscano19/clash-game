@@ -1,0 +1,140 @@
+{
+  "match": {
+    "id": "m_eng_usa",
+    "externalId": "ext_2",
+    "competition": "WORLD_CUP_2026",
+    "homeTeam": {
+      "id": "t_eng",
+      "name": "England",
+      "shortCode": "ENG",
+      "fanTokenSymbol": null
+    },
+    "awayTeam": {
+      "id": "t_usa",
+      "name": "USA",
+      "shortCode": "USA",
+      "fanTokenSymbol": null
+    },
+    "kickoffAt": "2026-06-16T18:00:00Z",
+    "status": "scheduled",
+    "currentMinute": 0,
+    "score": {
+      "home": 0,
+      "away": 0
+    }
+  },
+  "events": [
+    {
+      "id": "ev_hyhp590",
+      "matchId": "m_eng_usa",
+      "type": "kickoff",
+      "minute": 0,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_hlzoqo1",
+      "matchId": "m_eng_usa",
+      "type": "shot_off_target",
+      "minute": 15,
+      "team": "home",
+      "player": {
+        "id": "p_kane",
+        "name": "H. Kane"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_71tx9qc",
+      "matchId": "m_eng_usa",
+      "type": "corner",
+      "minute": 25,
+      "team": "home",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_zmzepnz",
+      "matchId": "m_eng_usa",
+      "type": "shot_off_target",
+      "minute": 35,
+      "team": "away",
+      "player": {
+        "id": "p_pulisic",
+        "name": "C. Pulisic"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_pk8fmma",
+      "matchId": "m_eng_usa",
+      "type": "half_time",
+      "minute": 45,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_z3q5rhg",
+      "matchId": "m_eng_usa",
+      "type": "second_half_start",
+      "minute": 45,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_o7t6xc3",
+      "matchId": "m_eng_usa",
+      "type": "corner",
+      "minute": 60,
+      "team": "away",
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_6p9jk55",
+      "matchId": "m_eng_usa",
+      "type": "substitution",
+      "minute": 70,
+      "team": "home",
+      "player": {
+        "id": "p_foden",
+        "name": "P. Foden"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_zqexoqn",
+      "matchId": "m_eng_usa",
+      "type": "yellow_card",
+      "minute": 85,
+      "team": "away",
+      "player": {
+        "id": "p_mckennie",
+        "name": "W. McKennie"
+      },
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    },
+    {
+      "id": "ev_3z8zjwo",
+      "matchId": "m_eng_usa",
+      "type": "full_time",
+      "minute": 93,
+      "team": null,
+      "player": null,
+      "detailJson": {},
+      "occurredAt": "2026-05-05T15:41:11.129Z"
+    }
+  ]
+}

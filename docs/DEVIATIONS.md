@@ -59,3 +59,14 @@ Format per `coding_standards.md §0`: date, section reference, decision, rationa
 **Impact:** None. The route matching and redirect logic in Phase 1 will work identically.
 
 ---
+
+## DEV-006 — Cloud Supabase instead of Local Docker
+
+**Date:** 2026-05-05
+**Spec section:** `ag_instructions.md §1.1`
+**Spec says:** `supabase init` and `supabase start` for local development.
+**What we did:** Bypassed local Docker requirement entirely and connected directly to a Supabase Cloud project.
+**Rationale:** User requested to proceed without installing Docker locally. Supabase Cloud provides the exact same environment and we can push migrations to it directly.
+**Impact:** `pnpm db:types` will need to run against the linked cloud project instead of local. Auth callbacks will use the cloud URL.
+
+---

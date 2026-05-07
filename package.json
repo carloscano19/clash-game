@@ -13,6 +13,7 @@
     "test:coverage": "vitest run --coverage",
     "test:integration": "vitest run --config vitest.config.integration.ts",
     "test:e2e": "playwright test",
+    "db:seed": "dotenv -e .env.local -- tsx scripts/seed-matches.ts",
     "test:e2e:ui": "playwright test --ui",
     "db:types": "supabase gen types typescript --local > src/types/database.ts"
   },

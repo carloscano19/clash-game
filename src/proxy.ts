@@ -1,54 +1,70 @@
 /**
- * Next.js proxy (formerly middleware) — auth stub.
- * Redirects unauthenticated users to /login for protected routes.
- * Full implementation in Phase 1 (Supabase Auth).
- *
- * DEVIATION DEV-005: Next.js 16 renamed middleware.ts to proxy.ts with
- * a `proxy` export instead of `middleware`. See docs/DEVIATIONS.md.
- *
+ * Next.js proxy (formerly middleware) — Auth Gate.
+ * Validates the Supabase session and redirects to /login if missing.
  * See srs.md §10, coding_standards.md §3.4
+ *
+ * DEV NOTE: In local env (SOCIOS_ENV=local), auth is bypassed on lobby/duel
+ * routes so the UI can be tested without logging in.
  */
 
 import { type NextRequest, NextResponse } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 
 /**
- * Protected route patterns — anything under /(app)
+ * Protected route patterns — anything under /(app) that requires auth
+ * in production. In local mode these are accessible without a session.
  */
-const PROTECTED_PATHS = ['/lobby/', '/duel/', '/history'];
+const PROTECTED_PATHS = ['/duel/', '/history'];
 
-/**
- * Auth proxy stub.
- * In Phase 0: always allows — no Supabase client yet.
- * In Phase 1: will validate the Supabase JWT cookie via @supabase/ssr.
- */
-export function proxy(request: NextRequest): NextResponse {
-  const { pathname } = request.nextUrl;
+// Lobby is publicly viewable (stake selection requires auth — enforced in server action)
+const SEMI_PROTECTED_PATHS = ['/lobby/'];
 
-  const isProtected = PROTECTED_PATHS.some((path) =>
-    pathname.startsWith(path)
+export async function proxy(request: NextRequest) {
+  let supabaseResponse = NextResponse.next({ request });
+
+  const supabase = createServerClient(
+    process.env['NEXT_PUBLIC_SUPABASE_URL']!,
+    process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
+        },
+      },
+    }
   );
 
-  // Phase 0 stub — will be replaced in Phase 1
-  // When Supabase is wired: check cookie, redirect if null
-  if (isProtected) {
-    // TODO(Phase 1): validate Supabase session cookie
-    // const session = await getServerSession(request);
-    // if (!session) {
-    //   return NextResponse.redirect(new URL('/login', request.url));
-    // }
+  const { pathname } = request.nextUrl;
+  const isLocal = process.env['SOCIOS_ENV'] === 'local';
+
+  const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
+  const isSemiProtected = SEMI_PROTECTED_PATHS.some((path) => pathname.startsWith(path));
+
+  // Refresh auth token
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Block fully protected routes without auth (unless local dev)
+  if (isProtected && !user && !isLocal) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+  // Semi-protected: lobby is viewable, but the stake action will require auth
+  void isSemiProtected;
+
+  return supabaseResponse;
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all routes except:
-     * - API routes
-     * - Static files
-     * - _next internals
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
