@@ -2,17 +2,14 @@
 
 /**
  * Arena page — Player Waiting Room.
- * Users see who is available in the lobby for this match,
- * can challenge someone directly, or wait to be challenged.
+ * Uses Blind Matchmaking to prevent collusion.
  *
  * Flow: Lobby (choose stake) → Arena (waiting room) → Duel (challenge picker)
  * Step 3 in the 4-step flow.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { StepIndicator } from '@/components/ui/StepIndicator';
-import { IncomingChallengeModal } from '@/components/ui/IncomingChallengeModal';
-import { use } from 'react';
 
 interface ArenaPageProps {
   params: Promise<{ matchId: string }>;
@@ -26,22 +23,12 @@ const teamFlags: Record<string, string> = {
   ARG: '🇦🇷', FRA: '🇫🇷', ENG: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', USA: '🇺🇸', BRA: '🇧🇷', POR: '🇵🇹',
 };
 
-// Mock players available in this arena — in production these come from Supabase Realtime
-const MOCK_PLAYERS = [
-  { id: 'p1', username: 'messi_fan_99',    points: 2150, rank: '#12', lives: 3, waitSince: 18 },
-  { id: 'p2', username: 'zizou_legend',    points: 1840, rank: '#45', lives: 5, waitSince: 42 },
-  { id: 'p3', username: 'mbappé_2026',     points: 3100, rank: '#3',  lives: 2, waitSince: 7  },
-  { id: 'p4', username: 'wc_gambler',      points: 920,  rank: '#210',lives: 1, waitSince: 61 },
-  { id: 'p5', username: 'tango_dreams',    points: 1500, rank: '#89', lives: 4, waitSince: 3  },
+const MOCK_OPPONENTS = [
+  { id: 'p1', username: 'messi_fan_99' },
+  { id: 'p2', username: 'zizou_legend' },
+  { id: 'p3', username: 'mbappé_2026' },
+  { id: 'p4', username: 'wc_gambler' },
 ];
-
-// The mock challenger that will send an incoming challenge after 6 seconds
-const MOCK_CHALLENGER = {
-  id: 'p3',
-  username: 'mbappé_2026',
-  points: 3100,
-  rank: '#3',
-};
 
 export default function ArenaPage({ params, searchParams }: ArenaPageProps) {
   const { matchId } = use(params);
@@ -54,8 +41,8 @@ export default function ArenaPage({ params, searchParams }: ArenaPageProps) {
   const userRank = '#142';
 
   const [elapsed, setElapsed] = useState(0);
-  const [showIncoming, setShowIncoming] = useState(false);
-  const [challengedBy, setChallengedBy] = useState<typeof MOCK_CHALLENGER | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [onlinePlayers] = useState(Math.floor(Math.random() * 50) + 120); // e.g. 154
 
   // Tick the "waiting for" timer
   useEffect(() => {
@@ -63,18 +50,18 @@ export default function ArenaPage({ params, searchParams }: ArenaPageProps) {
     return () => clearInterval(t);
   }, []);
 
-  // Simulate incoming challenge after 6 seconds (demo)
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setChallengedBy(MOCK_CHALLENGER);
-      setShowIncoming(true);
-    }, 6000);
-    return () => clearTimeout(t);
-  }, []);
-
   const goToDuel = (opponentId: string, opponentName: string) => {
     const duelId = `duel_${matchId}_${Date.now()}`;
     window.location.href = `/duel/${duelId}?home=${homeTeam}&away=${awayTeam}&opponent=${opponentName}`;
+  };
+
+  const handleFindMatch = () => {
+    setIsSearching(true);
+    // Simulate finding an opponent after 2.5 seconds
+    setTimeout(() => {
+      const opponent = MOCK_OPPONENTS[Math.floor(Math.random() * MOCK_OPPONENTS.length)]!;
+      goToDuel(opponent.id, opponent.username);
+    }, 2500);
   };
 
   return (
@@ -92,24 +79,6 @@ export default function ArenaPage({ params, searchParams }: ArenaPageProps) {
           zIndex: 0,
         }}
       />
-
-      {/* Incoming Challenge Modal */}
-      {showIncoming && challengedBy && (
-        <IncomingChallengeModal
-          challenger={challengedBy}
-          challengeText="Corner kick in the next 5 min"
-          matchHomeTeam={homeTeam}
-          matchAwayTeam={awayTeam}
-          onAccept={() => {
-            setShowIncoming(false);
-            goToDuel(challengedBy.id, challengedBy.username);
-          }}
-          onDecline={() => {
-            setShowIncoming(false);
-            setChallengedBy(null);
-          }}
-        />
-      )}
 
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-8 space-y-6">
         {/* Match context bar */}
@@ -174,7 +143,6 @@ export default function ArenaPage({ params, searchParams }: ArenaPageProps) {
               >
                 C
               </span>
-              {/* Green available dot */}
               <span
                 className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2"
                 style={{
@@ -237,146 +205,72 @@ export default function ArenaPage({ params, searchParams }: ArenaPageProps) {
           </div>
         </div>
 
-        {/* ── ACTIVE PLAYERS LIST ── */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
+        {/* ── AUTOMATIC MATCHMAKING ── */}
+        <div 
+          className="rounded-2xl p-8 flex flex-col items-center justify-center text-center mt-8"
+          style={{
+            background: 'rgba(10,10,10,0.7)',
+            border: '1.5px solid var(--color-charcoal-600)',
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          <div className="mb-6">
             <h2
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: '13px',
-                letterSpacing: '0.2em',
-                color: 'var(--color-text-tertiary)',
-                fontWeight: 700,
+                fontSize: '24px',
+                fontWeight: 800,
+                color: 'var(--color-text-primary)',
+                letterSpacing: '0.04em',
               }}
             >
-              PLAYERS IN ARENA
+              ARENA MATCHMAKING
             </h2>
-            <span
-              className="text-xs px-2 py-0.5 rounded-full"
-              style={{
-                background: 'rgba(239,68,68,0.12)',
-                color: 'var(--color-chiliz-red)',
-                border: '1px solid rgba(239,68,68,0.3)',
-                fontFamily: 'var(--font-mono)',
-              }}
-            >
-              {MOCK_PLAYERS.length} online
-            </span>
+            <p className="text-sm mt-2" style={{ color: 'var(--color-text-tertiary)' }}>
+              <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
+              {onlinePlayers} players currently waiting
+            </p>
           </div>
 
-          <div className="space-y-2">
-            {MOCK_PLAYERS.map((player) => (
-              <div
-                key={player.id}
-                className="group flex items-center gap-4 rounded-2xl px-5 py-4 transition-all duration-200"
+          <button
+            onClick={handleFindMatch}
+            disabled={isSearching}
+            className="w-full py-5 rounded-xl font-black uppercase tracking-widest transition-all duration-300 relative overflow-hidden group"
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '18px',
+              background: isSearching ? 'var(--color-charcoal-700)' : 'var(--color-chiliz-red)',
+              color: isSearching ? 'var(--color-text-tertiary)' : '#fff',
+              boxShadow: isSearching ? 'none' : '0 0 40px var(--color-chiliz-red-glow)',
+              transform: isSearching ? 'scale(0.98)' : 'scale(1)',
+            }}
+          >
+            {isSearching ? (
+              <span className="flex items-center justify-center gap-3">
+                <span className="h-5 w-5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                SEARCHING OPPONENT...
+              </span>
+            ) : (
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                <span className="text-xl">⚔️</span> FIND MATCH
+              </span>
+            )}
+            
+            {/* Hover shine effect */}
+            {!isSearching && (
+              <div 
+                className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none"
                 style={{
-                  background: 'rgba(10,10,10,0.7)',
-                  border: '1.5px solid var(--color-charcoal-600)',
-                  backdropFilter: 'blur(8px)',
+                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
                 }}
-              >
-                {/* Avatar + presence */}
-                <div className="relative h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{
-                    background: 'var(--color-charcoal-700)',
-                    border: '1.5px solid var(--color-charcoal-500)',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '16px',
-                      fontWeight: 700,
-                      color: 'var(--color-text-secondary)',
-                    }}
-                  >
-                    {(player.username[0] ?? '?').toUpperCase()}
-                  </span>
-                  {/* Online dot */}
-                  <span
-                    className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-[1.5px]"
-                    style={{
-                      background: '#22c55e',
-                      borderColor: 'var(--color-charcoal-900)',
-                      boxShadow: '0 0 6px rgba(34,197,94,0.7)',
-                    }}
-                  />
-                </div>
+              />
+            )}
+          </button>
 
-                {/* Player info */}
-                <div className="flex-1 min-w-0">
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '15px',
-                      fontWeight: 700,
-                      color: 'var(--color-text-primary)',
-                    }}
-                  >
-                    @{player.username}
-                  </p>
-                  <p className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>
-                    Waiting {player.waitSince}s · <span style={{ color: 'var(--color-chiliz-red)' }}>❤️ {player.lives}</span>
-                  </p>
-                </div>
-
-                {/* Points */}
-                <div className="text-right mr-4">
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '18px',
-                      fontWeight: 800,
-                      color: 'var(--color-text-primary)',
-                    }}
-                  >
-                    🏆 {player.points.toLocaleString()}
-                  </p>
-                  <p className="text-[10px]" style={{ color: 'var(--color-text-tertiary)' }}>
-                    Rank {player.rank}
-                  </p>
-                </div>
-
-                {/* Challenge CTA */}
-                <button
-                  onClick={() => goToDuel(player.id, player.username)}
-                  className="flex-shrink-0 px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-widest transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-105"
-                  style={{
-                    background: 'var(--color-chiliz-red)',
-                    color: '#fff',
-                    fontFamily: 'var(--font-display)',
-                    letterSpacing: '0.1em',
-                    boxShadow: '0 0 16px var(--color-chiliz-red-glow)',
-                  }}
-                >
-                  ⚡ CHALLENGE
-                </button>
-                {/* Always-visible indicator for no-hover devices */}
-                <div
-                  className="flex-shrink-0 sm:hidden px-4 py-2 rounded-xl font-bold text-xs"
-                  style={{
-                    background: 'var(--color-charcoal-700)',
-                    color: 'var(--color-text-tertiary)',
-                    fontFamily: 'var(--font-display)',
-                  }}
-                  onClick={() => goToDuel(player.id, player.username)}
-                >
-                  VS
-                </div>
-              </div>
-            ))}
-          </div>
+          <p className="text-xs mt-6 max-w-sm" style={{ color: 'var(--color-text-tertiary)', lineHeight: 1.6 }}>
+            The system will automatically pair you with an opponent of similar rank to ensure fair play.
+          </p>
         </div>
-
-        {/* Tip */}
-        <p
-          className="text-center text-xs py-4"
-          style={{ color: 'var(--color-text-tertiary)' }}
-        >
-          Hover a player and click{' '}
-          <span style={{ color: 'var(--color-chiliz-red)', fontWeight: 700 }}>⚡ CHALLENGE</span>{' '}
-          to send them a duel request — or wait to be challenged.
-        </p>
       </div>
     </div>
   );
