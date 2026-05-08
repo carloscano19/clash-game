@@ -15,7 +15,7 @@ import './globals.css';
 import { TopBar } from '@/components/ui/TopBar';
 
 export const metadata: Metadata = {
-  title: 'Chiliz Clash — Live 1v1 Duels',
+  title: 'Socios Clash — Live 1v1 Duels',
   description:
     'Real-time 1v1 fan duels tied to live World Cup match events. Stake SSU or Fan Tokens. Let the AI arbitrate.',
   keywords: ['chiliz', 'fan tokens', 'world cup', 'live duels', 'football'],

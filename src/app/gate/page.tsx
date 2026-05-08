@@ -37,7 +37,7 @@ export default function GatePage() {
             className="text-white text-3xl font-black tracking-tighter mb-2"
             style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.05em' }}
           >
-            CHILIZ CLASH
+            SOCIOS CLASH
           </h1>
           <p className="text-charcoal-400 text-sm uppercase tracking-widest font-bold">
             Private MVP Access

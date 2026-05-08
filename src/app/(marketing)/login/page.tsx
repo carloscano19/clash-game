@@ -27,7 +27,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full bg-charcoal-800 border border-charcoal-500 rounded-xl p-8 shadow-2xl">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-display font-semibold text-text-primary tracking-wide">
-            WELCOME TO CHILIZ CLASH
+            WELCOME TO SOCIOS CLASH
           </h1>
           <p className="text-text-secondary mt-2">
             Enter your email to sign in via Magic Link.

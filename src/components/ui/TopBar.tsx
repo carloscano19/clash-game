@@ -26,7 +26,7 @@ export async function TopBar() {
         <Link
           href="/"
           className="flex items-center gap-2 no-underline"
-          aria-label="Chiliz Clash — Home"
+          aria-label="Socios Clash — Home"
         >
           <Zap
             size={20}
@@ -41,7 +41,7 @@ export async function TopBar() {
               letterSpacing: '0.02em',
             }}
           >
-            CHILIZ CLASH
+            SOCIOS CLASH
           </span>
         </Link>
 
