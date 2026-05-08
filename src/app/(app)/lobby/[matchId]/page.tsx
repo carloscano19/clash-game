@@ -26,8 +26,9 @@ export default function LobbyPage({ params }: LobbyPageProps) {
   const [isMatching, setIsMatching] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
-  // Mock lives state
+  // Mock states
   const lives = 5;
+  const tokenBalance = 120; // Simulated $ARG balance
 
   // Fetch match
   useEffect(() => {
@@ -65,11 +66,12 @@ export default function LobbyPage({ params }: LobbyPageProps) {
     return () => es.close();
   }, [matchId]);
 
-  const handleEnterArena = async () => {
+  const handleEnterArena = async (isVip: boolean = false) => {
     if (lives <= 0) return;
+    if (isVip && tokenBalance < 50) return;
     setIsMatching(true);
     await new Promise((r) => setTimeout(r, 1000));
-    window.location.href = `/arena/${matchId}?home=${match?.homeTeam.shortCode ?? 'HOME'}&away=${match?.awayTeam.shortCode ?? 'AWAY'}`;
+    window.location.href = `/arena/${matchId}?home=${match?.homeTeam.shortCode ?? 'HOME'}&away=${match?.awayTeam.shortCode ?? 'AWAY'}${isVip ? '&vip=true' : ''}`;
   };
 
   const eventIcons: Record<string, string> = {
@@ -127,16 +129,9 @@ export default function LobbyPage({ params }: LobbyPageProps) {
         {/* Step indicator */}
         <StepIndicator currentStep={2} />
 
-        {/* ── ENTER ARENA ── */}
-        <div
-          className="rounded-2xl p-6 space-y-6 text-center"
-          style={{
-            background: 'linear-gradient(135deg, rgba(239,68,68,0.1) 0%, var(--color-charcoal-800) 100%)',
-            border: '1.5px solid var(--color-charcoal-600)',
-            boxShadow: 'var(--elevation-2)',
-          }}
-        >
-          <div className="flex items-center justify-between">
+        {/* ── ENTER ARENA (DUAL MODE) ── */}
+        <div>
+          <div className="flex items-center justify-between mb-6">
             <h2
               style={{
                 fontFamily: 'var(--font-display)',
@@ -146,70 +141,89 @@ export default function LobbyPage({ params }: LobbyPageProps) {
                 letterSpacing: '0.04em',
               }}
             >
-              ARENA ENTRY
+              CHOOSE ARENA
             </h2>
-            <div className="text-xs" style={{ color: 'var(--color-text-tertiary)', fontFamily: 'var(--font-mono)' }}>
-              Step 2 of 4
+            <div className="text-xs px-3 py-1 rounded-full" style={{ background: 'var(--color-charcoal-700)', color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)' }}>
+              💰 {tokenBalance} $ARG
             </div>
           </div>
 
-          <div className="py-6 flex flex-col items-center justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* PUBLIC ARENA */}
             <div
-              className="h-20 w-20 flex items-center justify-center rounded-full mb-4"
+              className="rounded-2xl p-6 flex flex-col text-center"
               style={{
-                background: 'rgba(239,68,68,0.15)',
-                border: '2px solid rgba(239,68,68,0.4)',
-                boxShadow: '0 0 30px rgba(239,68,68,0.2)',
+                background: 'linear-gradient(135deg, rgba(239,68,68,0.05) 0%, var(--color-charcoal-800) 100%)',
+                border: '1px solid var(--color-charcoal-600)',
               }}
             >
-              <span className="text-4xl animate-pulse">❤️</span>
-            </div>
-            <p className="text-sm uppercase tracking-widest" style={{ color: 'var(--color-text-tertiary)' }}>
-              Cost to enter
-            </p>
-            <p
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '32px',
-                fontWeight: 800,
-                color: 'var(--color-text-primary)',
-              }}
-            >
-              1 LIFE
-            </p>
-            <p className="text-sm mt-2" style={{ color: 'var(--color-text-secondary)' }}>
-              You have {lives} lives remaining today.
-            </p>
-          </div>
+              <h3 className="text-lg font-bold mb-1" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-text-primary)' }}>PUBLIC ARENA</h3>
+              <p className="text-xs mb-6" style={{ color: 'var(--color-text-tertiary)' }}>Standard Rewards (1x)</p>
+              
+              <div className="flex-1 flex flex-col items-center justify-center py-4">
+                <div className="text-3xl mb-2">❤️</div>
+                <p className="text-xs uppercase tracking-widest" style={{ color: 'var(--color-text-tertiary)' }}>Entry Cost</p>
+                <p className="text-2xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-text-primary)' }}>1 LIFE</p>
+              </div>
 
-          {/* CTA */}
-          <button
-            onClick={handleEnterArena}
-            disabled={lives <= 0 || isMatching}
-            className="w-full py-4 rounded-xl font-bold uppercase tracking-widest transition-all duration-300"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '16px',
-              letterSpacing: '0.12em',
-              background: lives > 0 && !isMatching
-                ? 'var(--color-chiliz-red)'
-                : 'var(--color-charcoal-700)',
-              color: lives > 0 && !isMatching ? '#fff' : 'var(--color-text-tertiary)',
-              boxShadow: lives > 0 && !isMatching ? '0 0 30px var(--color-chiliz-red-glow)' : 'none',
-              cursor: lives > 0 && !isMatching ? 'pointer' : 'not-allowed',
-            }}
-          >
-            {isMatching ? (
-              <span className="flex items-center justify-center gap-3">
-                <span className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                Entering...
-              </span>
-            ) : lives > 0 ? (
-              '⚡ ENTER ARENA'
-            ) : (
-              'OUT OF LIVES — GET MORE'
-            )}
-          </button>
+              <button
+                onClick={() => handleEnterArena(false)}
+                disabled={lives <= 0 || isMatching}
+                className="w-full mt-4 py-3 rounded-xl font-bold uppercase tracking-widest transition-colors"
+                style={{
+                  background: 'var(--color-charcoal-700)',
+                  color: lives > 0 ? '#fff' : 'var(--color-text-tertiary)',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '14px',
+                }}
+              >
+                ENTER PUBLIC
+              </button>
+            </div>
+
+            {/* VIP ARENA */}
+            <div
+              className="rounded-2xl p-6 flex flex-col text-center relative overflow-hidden group"
+              style={{
+                background: 'linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(15,15,15,0.95) 100%)',
+                border: '1.5px solid rgba(245,158,11,0.4)',
+                boxShadow: '0 0 40px rgba(245,158,11,0.1)',
+              }}
+            >
+              <div className="absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(245,158,11,0.2)', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.4)' }}>
+                PREMIUM
+              </div>
+              <h3 className="text-lg font-bold mb-1" style={{ fontFamily: 'var(--font-display)', color: '#f59e0b', textShadow: '0 0 10px rgba(245,158,11,0.3)' }}>VIP FAN ARENA</h3>
+              <p className="text-xs mb-6" style={{ color: 'var(--color-text-secondary)' }}>Earn <strong className="text-amber-400">5x Points</strong> + Exclusive Rewards</p>
+              
+              <div className="flex-1 flex flex-col items-center justify-center py-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-3xl">❤️</span>
+                  <span className="text-xl" style={{ color: 'var(--color-charcoal-500)' }}>+</span>
+                  <div className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-xs font-black text-black">
+                    ARG
+                  </div>
+                </div>
+                <p className="text-xs uppercase tracking-widest mt-2" style={{ color: 'var(--color-text-tertiary)' }}>Entry Requirement</p>
+                <p className="text-lg font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--color-text-primary)' }}>1 LIFE & HOLD 50 $ARG</p>
+              </div>
+
+              <button
+                onClick={() => handleEnterArena(true)}
+                disabled={lives <= 0 || tokenBalance < 50 || isMatching}
+                className="w-full mt-4 py-3 rounded-xl font-bold uppercase tracking-widest transition-all relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(90deg, #d97706, #f59e0b)',
+                  color: '#000',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '14px',
+                  boxShadow: '0 0 20px rgba(245,158,11,0.4)',
+                }}
+              >
+                {isMatching ? 'ENTERING...' : '⚡ ENTER VIP ARENA'}
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Live Events Feed */}

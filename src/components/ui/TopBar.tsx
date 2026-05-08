@@ -55,6 +55,9 @@ export async function TopBar() {
       </div>
 
       <div className="flex items-center gap-3">
+        <Link href="/vault" className="no-underline group hidden sm:block">
+          <VaultPill />
+        </Link>
         <Link href="/leaderboard" className="no-underline group">
           <PointsPill points={profile ? 1250 : undefined} rank={profile ? "#142" : undefined} />
         </Link>
@@ -186,5 +189,28 @@ function AvatarMenu({ initial }: { initial: string }) {
     >
       {initial}
     </button>
+  );
+}
+
+/** Vault pill */
+function VaultPill() {
+  return (
+    <div
+      className="flex items-center gap-1.5 px-3 py-1 rounded-full transition-all duration-200 hover:scale-105"
+      style={{
+        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+        border: '1px solid rgba(34, 197, 94, 0.3)',
+        fontFamily: 'var(--font-display)',
+        color: 'var(--color-text-primary)',
+        fontSize: '14px',
+        fontWeight: 700,
+      }}
+      aria-label="Clash Vault"
+    >
+      <span style={{ fontSize: '13px' }}>🏦</span>
+      <span className="group-hover:text-green-400 transition-colors uppercase tracking-wider text-xs">
+        VAULT
+      </span>
+    </div>
   );
 }
